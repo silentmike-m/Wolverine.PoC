@@ -15,6 +15,8 @@ public sealed class PingCustomerHandler
     {
         this.logger.LogInformation("START PONG");
 
+        cancellationToken.ThrowIfCancellationRequested();
+
         var isExceptionTime = DateTime.Now.Second % 10 != 0;
 
         if (isExceptionTime)

@@ -2,7 +2,7 @@
 
 using System.Text.Json;
 
-public static class JsonExtension
+public static class JsonExtensions
 {
     public static T To<T>(this string source)
     {
