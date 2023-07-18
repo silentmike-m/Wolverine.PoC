@@ -1,7 +1,6 @@
 ﻿namespace Wolverine.PoC.WebApi.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
-using Wolverine.PoC.Application.Commons;
 using Wolverine.PoC.Application.Customers.Commands;
 using Wolverine.PoC.Application.Customers.Queries;
 
@@ -9,11 +8,9 @@ using Wolverine.PoC.Application.Customers.Queries;
 public sealed class CustomersController : ApiControllerBase
 {
     [HttpGet(Name = "GetPing")]
-    public async Task<string> GetPing()
+    public async Task<string> GetPing(CancellationToken cancellationToken = default)
     {
         var request = new GetPing();
-
-        var cancellationToken = CancellationTokenFactory.CreateToken(30);
 
         var result = await this.Bus.InvokeAsync<string>(request, cancellationToken);
 
@@ -21,11 +18,9 @@ public sealed class CustomersController : ApiControllerBase
     }
 
     [HttpPost(Name = "Ping")]
-    public async Task<IActionResult> Ping()
+    public async Task<IActionResult> Ping(CancellationToken cancellationToken = default)
     {
         var request = new PingCustomer();
-
-        var cancellationToken = CancellationTokenFactory.CreateToken(30);
 
         await this.Bus.InvokeAsync(request, cancellationToken);
 
@@ -33,11 +28,11 @@ public sealed class CustomersController : ApiControllerBase
     }
 
     [HttpPost(Name = "PingWithTimeOut")]
-    public async Task<IActionResult> PingWithTimeOut()
+    public async Task<IActionResult> PingWithTimeOut(CancellationToken cancellationToken = default)
     {
         var request = new PingCustomer();
 
-        var cancellationToken = CancellationTokenFactory.CreateToken(2);
+        await Task.Delay(TimeSpan.FromSeconds(10));
 
         await this.Bus.InvokeAsync(request, cancellationToken);
 
